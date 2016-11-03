@@ -144,7 +144,7 @@ var note = {
   var x = localStorage.getItem('td_welcome')
   if(!x){
     localStorage.setItem('td_bw_welcome','> 使用指南<br><br>+ 欢迎使用伯格笔记，你可以在左边保存笔记，或者按标签阅读笔记。<br><br>+ 删除笔记需要点击打开按钮，并且在提示框中输入sure进行确认。<br><br>+ 笔记将进行离线存储，长期有效（请勿清空浏览器）。')
-    localStorage.setItem('td_bw_welcome_1','> 项目地址<br><br>+ github https://github.com/bergwhite/bergnote<br><br>+ GPL 3.0')
+    localStorage.setItem('td_bw_welcome_1','> 项目地址<br><br>+ github https://github.com/bergwhite/bergnote/tree/dev<br><br>+ GPL 3.0')
     localStorage.setItem('td_bw_welcome_2','> 开发者说<br><br>+ 项目还在开发阶段，还有很多设计不佳的地方有待改善（比如删除笔记的时候布局会错乱、分类不能自定义和响应式布局）<br><br>+ 有更好的建议欢迎提交issue')
   }
 })()
