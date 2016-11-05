@@ -17,7 +17,7 @@ var note = {
     return time
   },
   get:function(s){
-    var k,v,d,p,t,f,e,y,o,l,tagName,tag,tagZh,sss
+    var k,v,d,p,t,f,e,y,o,l,tagName,tag,tagZh,sss,q
     tag=['td','yd','yy','bw','bk','wz','sq','zx','h5','c3','js','py','xm','zj','sf','yl']
     tagZh=['全部','阅读','英语','备忘','博客','文章','社区','总结','HTML5','CSS3','JavaScript','Python','项目','组件','算法','原理']
     d = document.getElementsByClassName('td-display')[0]
@@ -32,29 +32,39 @@ var note = {
       if (localStorage.key(i).match(s)) {
         k = localStorage.key(i)
         v = localStorage.getItem(k)
+
         p = document.createElement('pre')
         p.className = 'td-all'
         p.setAttribute('data-save',k)
         p.innerHTML = v
         d.appendChild(p)
+
+        q = document.createElement('div')
+        q.className = 'td-more'
+        q.setAttribute('data-save',k)
+
         f = document.createElement('a')
         f.className = 'td-del'
         f.setAttribute('data-save',k)
         f.setAttribute('onclick','note.del(this)')
         f.innerHTML = '删除'
-        d.appendChild(f)
+        q.appendChild(f)
+
         e = document.createElement('a')
         e.className = 'td-mod'
         e.setAttribute('data-save',k)
         e.setAttribute('onclick','note.mod(this)')
         e.innerHTML = '修改'
-        d.appendChild(e)
+        q.appendChild(e)
+
         y = document.createElement('a')
         y.className = 'td-mov'
         y.setAttribute('data-save',k)
         y.setAttribute('onclick','note.mov(this)')
         y.innerHTML = '移动'
-        d.appendChild(y)
+        q.appendChild(y)
+
+        d.appendChild(q)
       }
     }
     l = document.querySelector('.td-ctrl')
@@ -132,10 +142,10 @@ var note = {
     this.get(t)
   },
   ctrl:function (v) {
-    var s = document.querySelectorAll('.td-del,.td-mod,.td-mov')
-    s[0].style.display==='inline' ? v.value='打开' : v.value='关闭'
+    var s = document.querySelectorAll('.td-more')
+    s[0].style.display==='block' ? v.value='打开' : v.value='关闭'
     for(var i=0;i<s.length;i++){
-      s[i].style.display==='' ? s[i].style.display='inline' : s[i].style.display=''
+      s[i].style.display==='' ? s[i].style.display='block' : s[i].style.display=''
     }
   }
 }
@@ -144,7 +154,7 @@ var x = localStorage.getItem('td_welcome')
 if(!x){
   localStorage.setItem('td_bw_welcome','> 使用指南<br><br>+ 欢迎使用伯格笔记，你可以在左边保存笔记，或者按标签阅读笔记。<br><br>+ 删除笔记需要点击打开按钮，并且在提示框中输入sure进行确认。<br><br>+ 笔记将进行离线存储，长期有效（请勿清空浏览器）。')
   localStorage.setItem('td_bw_welcome_1','> 项目地址<br><br>+ github https://github.com/bergwhite/bergnote/tree/dev<br><br>+ GPL 3.0')
-  localStorage.setItem('td_bw_welcome_2','> 开发者说<br><br>+ 项目还在开发阶段，还有很多设计不佳的地方有待改善（比如删除笔记的时候布局会错乱、分类不能自定义和响应式布局）<br><br>+ 有更好的建议欢迎提交issue')
+  localStorage.setItem('td_bw_welcome_2','> 开发者说<br><br>+ 项目还在开发阶段，还有很多设计不佳的地方有待改善（比如分类不能自定义、没有响应式布局（正在开发）和没有自动保存）<br><br>+ 有更好的建议欢迎提交issue')
 }
 
 var enter = function(reg) {

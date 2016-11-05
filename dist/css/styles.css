@@ -144,11 +144,10 @@ pre {
   padding: 10px;
   border:1px solid rgba(97, 124, 255, 0.3);
   border-radius: 5px;
-
+  z-index: 2;
 }
 .td-input:hover {
   border:1px solid rgba(97, 124, 255, 0.7);
-  border-radius: 5px;
 }
 .td-save,.td-ctrl {
   width:200px;
@@ -194,16 +193,23 @@ pre {
   background-color: rgba(3, 169, 244, 0.7);
   cursor: pointer;
 }
+.td-more {
+  margin: auto;
+  margin-top: 5px;
+  padding: 10px;
+  width: 750px;
+  display: none;
+}
 .td-del,.td-mod,.td-mov,.td-save,.td-ctrl {
   padding: 10px;
   font-size: 12px;
   background-color: red;
   color: white;
   margin-right: 10px;
+  position: relative;
 }
 .td-del,.td-mod,.td-mov {
   width: 60px;
-  display: none;
 }
 
 #todo-editable {
