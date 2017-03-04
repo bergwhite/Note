@@ -1,0 +1,30 @@
+{
+  "name": "bergnote",
+  "version": "0.1.0",
+  "description": "基于浏览器离线存储的笔记系统",
+  "main": "no",
+  "scripts": {
+    "test": "no"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bergwhite/bergnote.git"
+  },
+  "keywords": [
+    "bergnote",
+    "berg",
+    "note"
+  ],
+  "author": "berg",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/bergwhite/bergnote/issues"
+  },
+  "homepage": "https://github.com/bergwhite/bergnote#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-less": "^3.1.0",
+    "gulp-minify-css": "^1.2.4",
+    "gulp-uglify": "^2.0.0"
+  }
+}
