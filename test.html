@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	<script type="text/javascript">
+		function getJSON (method,url) {
+			var XMLHttp = new XMLHttpRequest()
+			XMLHttp.onreadystatechange = function () {
+				if (XMLHttp.readyState === 4 && XMLHttp.status === 200) {
+					console.log(JSON.parse(XMLHttp.responseText))
+				}
+			}
+			XMLHttp.open(method,url,true)
+			XMLHttp.send()
+		}
+		getJSON('GET','/bergnote/api/note/search.php')
+	</script>
+</body>
+</html>
