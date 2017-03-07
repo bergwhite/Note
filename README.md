@@ -17,8 +17,11 @@
 		login.php  // 处理用户登陆，成功则设置COOKIE标记登陆状态
 		login_check.php  // 检查用户是否登陆
 		register.php  // 处理用户注册
-		forget.php  // 修改密码
+		forget.php  // 忘记密码（验证邮箱）
+		password.php  // 修改密码（需要输入原密码）
 ```
+3. 后端API只剩忘记密码（这个打算先放一放）和修改密码未做完。明天把后端代码优化一下，接着就开始做前端的活了。是用原生JS，还是直接BS,JS一套上，还没有决定。或者用Vue。
+
 ### 在线预览
 
 为了方便对项目进行预览，代码放在了个人网站。 [Note在线预览](http://berg-lab.com/demo/note/)
