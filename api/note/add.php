@@ -5,7 +5,7 @@ include '../user/login_check.php';  // 引入登陆检查页面，未登录不�
 
 $cookie_userId = (int)$_COOKIE["userId"];  // 获取用户ID
 
-echo gettype($cookie_userId);
+// echo gettype($cookie_userId);
 
 /* 文章信息
 
@@ -26,17 +26,18 @@ $dates = date("Y-m-d");
 
 /* 执行添加语句 */
 
-//$sql = "INSERT INTO `note` (`note_id`,`user_id`,`note_tag`,`note_title`,`note_content`,`note_date`) VALUES (NULL,'$cookie_userId','$tag','$title','$content','2017-03-20')";
-$sql = "INSERT INTO `note` (`note_id`,`user_id`,`note_tag`,`note_title`,`note_content`,`note_date`) VALUES (NULL,2,'CSS','这是一篇测速文章','通过后台添加进来的','2017-03-20')";
-//$sql = "insert into note (note_id,user_id,tag_name,note_title,note_content,note_date) values (4,2,'css','not','work','2017-03-07')";
+$sql = "insert into note (user_id,note_tag,note_title,note_content,note_date) values ('$cookie_userId','$tag','$title','$content','$dates')";
 $result = mysql_query($sql);
 
 /* 返回JSON状态*/
 
-while ($row = mysql_fetch_array($result)) {
-	$resultJSON = array("addState","yes");
-	echo json_encode($resultJSON);
+if($result){
+	$resultJSON = array("addState"=>"yes");
 }
+else {
+	$resultJSON = array("addState"=>"no");
+}
+echo json_encode($resultJSON);
 
 mysql_close($conn);  // 断开数据库连接
 

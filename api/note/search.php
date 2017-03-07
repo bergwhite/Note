@@ -14,6 +14,7 @@ $resultJSON = array();  // 定义数组
 /* 开始查询 */
 
 while($row = mysql_fetch_array($result)){
+
   $arr = array('tag'=>$row['note_tag'],'title'=>$row['note_title'],'content'=>$row['note_content'],'date'=>$row['note_date']);  // 文章的信息保存到一个数组
   $resultJSON[] = $arr;  // 每天文章分别保存为一个数组值
 };

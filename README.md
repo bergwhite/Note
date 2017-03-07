@@ -12,7 +12,7 @@
 		add.php  // 添加文章
 		delete.php  // 删除文章
 		modify.php  // 修改文章
-		search.php  // 已设计完成
+		search.php  // 搜索文章
 	/user
 		login.php  // 负责处理用户登陆，登陆成功设置COOKIE
 		login_check.php  // 负责检查用户是否登陆
