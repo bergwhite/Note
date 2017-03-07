@@ -7,7 +7,7 @@ $cookie_userId = $_COOKIE["userId"];  // 获取用户ID
 
 /* 查询语句 */
 
-$sql = "select * from note where user_id = "."$cookie_userId";  // 写入语句
+$sql = "select * from note where user_id = '$cookie_userId'";  // 写入语句
 $result = mysql_query($sql);  // 执行语句
 $resultJSON = array();  // 定义数组
 

@@ -22,11 +22,11 @@ $tag = "CSS";
 $title = "这是一篇测速文章";
 $content = "通过后台添加进来的";
 date_default_timezone_set("UTC");
-$dates = date("Y-m-d");
+$date = date("Y-m-d");
 
 /* 执行添加语句 */
 
-$sql = "insert into note (user_id,note_tag,note_title,note_content,note_date) values ('$cookie_userId','$tag','$title','$content','$dates')";
+$sql = "insert into note (user_id,note_tag,note_title,note_content,note_date) values ($cookie_userId,'$tag','$title','$content','$date')";
 $result = mysql_query($sql);
 
 /* 返回JSON状态*/

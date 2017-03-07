@@ -14,13 +14,14 @@
 		modify.php  // 修改文章
 		search.php  // 搜索文章
 	/user
-		login.php  // 负责处理用户登陆，登陆成功设置COOKIE
-		login_check.php  // 负责检查用户是否登陆
-		register.php  // 负责处理用户注册
+		login.php  // 处理用户登陆，成功则设置COOKIE标记登陆状态
+		login_check.php  // 检查用户是否登陆
+		register.php  // 处理用户注册
+		forget.php  // 修改密码
 ```
 ### 在线预览
 
-为了方便对项目进行预览，代码放在了个人网站。 [伯格笔记在线预览](http://berg-lab.com/demo/note/)
+为了方便对项目进行预览，代码放在了个人网站。 [Note在线预览](http://berg-lab.com/demo/note/)
 
 ### 项目重构
 
