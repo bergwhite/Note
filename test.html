@@ -61,19 +61,7 @@
 		</div>
 		-->
 	</div>
-	<script type="text/javascript">
-		function getJSON (method,url) {
-			var XMLHttp = new XMLHttpRequest()
-			XMLHttp.onreadystatechange = function () {
-				if (XMLHttp.readyState === 4 && XMLHttp.status === 200) {
-					console.log(JSON.parse(XMLHttp.responseText))
-				}
-			}
-			XMLHttp.open(method,url,true)
-			XMLHttp.send()
-		}
-		getJSON('GET','/Note/api/note/search.php')
-	</script>
+	<script type="text/javascript" src="ajax.js"></script>
 	<script type="text/javascript" src="test.js"></script>
 </body>
 </html>
