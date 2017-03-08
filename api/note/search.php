@@ -7,7 +7,7 @@ $cookie_userId = $_COOKIE["userId"];  // 获取用户ID
 
 /* 查询语句 */
 
-$sql = "select * from note where user_id = '$cookie_userId'";  // 写入语句
+$sql = "select * from note where user_id = '$cookie_userId' order by note_id";  // 写入语句
 $result = mysql_query($sql);  // 执行语句
 $resultJSON = array();  // 定义数组
 
@@ -15,7 +15,7 @@ $resultJSON = array();  // 定义数组
 
 while($row = mysql_fetch_array($result)){
 
-  $arr = array('tag'=>$row['note_tag'],'title'=>$row['note_title'],'content'=>$row['note_content'],'date'=>$row['note_date']);  // 文章的信息保存到一个数组
+  $arr = array('id'=>$row['note_id'],'tag'=>$row['note_tag'],'title'=>$row['note_title'],'content'=>$row['note_content'],'date'=>$row['note_date']);  // 文章的信息保存到一个数组
   $resultJSON[] = $arr;  // 每天文章分别保存为一个数组值
 };
 
