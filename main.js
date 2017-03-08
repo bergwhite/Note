@@ -172,10 +172,10 @@ var noteLogin = $('.note-login');
 if($.cookie('user')){
 	noteLogin.empty();
 	noteLogin.addClass('row nav nav-pills clear clear-right');
-	console.log(noteLogin)
+	//console.log(noteLogin)
 	let user = $.cookie('user'),
 		userNav = `
-		welcome, ${user} <button class="btn btn-default" onclick="logout()">注销</button>
+		Hello, ${user} <button class="btn btn-default" onclick="logout()">注销</button>
 	`;
 	noteLogin.append(userNav);
 };
