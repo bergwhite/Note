@@ -11,17 +11,14 @@ if(!empty($_COOKIE["userId"])){
 }
 else {
 
-	/* 获取登陆信息
-
 	$user = $_POST['user'];
-	$pass = $_POST['pass']
+	$pass = md5($_POST['pass']);
 
-	 */
 
 	/* 前端界面未完成，暂时使用模拟信息 */
 
-	$user = "berg";
-	$pass = md5("23334");
+	//$user = "berg";
+	//$pass = md5("23334");
 
 
 	/* 验证登陆信息 */
@@ -40,7 +37,7 @@ else {
 
 		$userId = $row["user_id"];
 
-		setcookie("user",$user,time()+3600,"/","localhost",null,true);
+		setcookie("user",$user,time()+3600,"/","localhost",null,false);
 		setcookie("userId",$userId,time()+3600,"/","localhost",null,true);
 		exit();
 		// echo $row['user_name'].' '.$row['user_pass']; // 测速登陆结果

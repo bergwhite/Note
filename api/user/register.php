@@ -7,20 +7,24 @@ $cookie_userId = (int)$_COOKIE["userId"];  // 获取用户ID
 
 // echo gettype($cookie_userId);
 
-/* 注册信息
+// 注册信息
 
 $user = $_POST["user"];
-$pass = $_POST["pass"];
-$mail = $_POST["content"];
-
- */
+$pass = md5($_POST["pass"]);
+if ($_POST["mail"]) {
+	$mail = $_POST["mail"];
+}
+else {
+	$mail = "init@berg.com";
+}
+//$mail = $_POST["content"];
 
 /* 前端界面未完成，暂时使用模拟信息 */
-
+/*
 $user = "lloxafs";
 $pass = "worlxdasfd";
 $mail = "hello@wosas.coms";
-
+*/
 /* 执行添加语句 */
 
 $sql = "insert into user (user_name,user_pass,user_mail) values ('$user','$pass','$mail')";
@@ -32,10 +36,10 @@ $result = mysql_query($sql);
 // mysql_affected_rows()
 
 if($result){
-	$resultJSON = array("addState"=>"yes");
+	$resultJSON = array("registerState"=>"yes");
 }
 else {
-	$resultJSON = array("addState"=>"no");
+	$resultJSON = array("registerState"=>"no");
 }
 echo json_encode($resultJSON);
 
