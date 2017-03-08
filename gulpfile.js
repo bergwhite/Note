@@ -5,9 +5,9 @@ var gulp = require('gulp'),
     rename = require('gulp-rename')
 
 gulp.task('compile-less', function () {
-    gulp.src('dist/less/*.less')
+    gulp.src('src/less/*.less')
     .pipe(less())
-    .pipe(gulp.dest('dist/css'));
+    .pipe(gulp.dest('src/css'));
 });
 gulp.task('minify-css', function () {
     gulp.src('src/css/*.css')
@@ -26,4 +26,5 @@ gulp.task('rename',function () {
     }))
     .pipe(gulp.dest('./dist'))
 })
+gulp.task('ready',['compile-less'])
 gulp.task('build',['minify-css','minify-js'])

@@ -1,0 +1,33 @@
+.clear {
+	overflow: hidden;
+}
+.clear-left > li {
+	float: left;
+}
+.clear-right > li {
+	float: right;
+}
+.note-login {
+	margin-top: 20px;
+}
+.notes {
+	.note {
+		margin-top: 20px;
+		transition:all .5s;
+		&:hover {
+			box-shadow: 5px 10px 5px gray;
+		}
+		.note-title {
+			background-color: #009688;
+			color: white;
+			margin: 0;
+		}
+		.note-content {
+			border: 1px solid #009688;
+			border-top: 0;
+		}
+		.note-title,.note-content {
+			padding: 15px;
+		}
+	}
+}
