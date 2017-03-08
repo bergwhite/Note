@@ -11,11 +11,6 @@ if(!empty($_COOKIE["userId"])){
 }
 else {
 
-	/* 正在登陆 */
-
-	$arr = array("loginState"=>"login...");
-	echo json_encode($arr);
-
 	/* 获取登陆信息
 
 	$user = $_POST['user'];
@@ -26,7 +21,7 @@ else {
 	/* 前端界面未完成，暂时使用模拟信息 */
 
 	$user = "berg";
-	$pass = md5("2333");
+	$pass = md5("23334");
 
 
 	/* 验证登陆信息 */
@@ -38,13 +33,23 @@ else {
 
 	while($row = mysql_fetch_array($result)){
 
+		/* 正在登陆 */
+
+		$arr = array("loginState"=>"login...");
+		echo json_encode($arr);
+
 		$userId = $row["user_id"];
 
 		setcookie("user",$user,time()+3600,"/","localhost",null,true);
 		setcookie("userId",$userId,time()+3600,"/","localhost",null,true);
-
+		exit();
 		// echo $row['user_name'].' '.$row['user_pass']; // 测速登陆结果
 
 	};
+
+	/* 输出登陆失败信息 */
+
+	$arr = array("loginState"=>"no");
+	echo json_encode($arr);
 }
  ?>
