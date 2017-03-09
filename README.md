@@ -14,6 +14,44 @@
 8. 代码健壮性有待优化
 9. 密码使用MD5加密（暂时性）
 
+目录结构
+
+```
+/src  开发目录
+	/less
+		styles.less
+	/css
+		styles.css
+	/js
+		javascript.js
+	/img
+
+/dist  线上目录
+	/css
+	/js
+	/img
+
+/api
+	/note
+		add.php  // 添加文章
+		delete.php  // 删除文章
+		modify.php  // 修改文章
+		search.php  // 搜索文章
+	/user
+		login.php  // 处理用户登陆，成功则设置COOKIE标记登陆状态并刷新页面
+		login_check.php  // 检查用户是否登陆，未登录停止执行后续语句
+		register.php  // 处理用户注册，注册成功设置COOKIE刷新页面
+		forget.php  // 忘记密码（验证邮箱）
+		password.php  // 修改密码（需要输入原密码）
+
+/theme
+	/localstorage  // 初期版本，笔记主要存储在本地存储，页面即开即用
+
+conn.php  // 数据库连接文件
+test.js  // js调试文件
+index.html  // 主文件
+```
+
 > 2017.03.08
 
 1. 更新了密码修改模块。

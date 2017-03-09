@@ -1,164 +1,234 @@
-var note = {
-  tme:function(){
-    var t,time,year,month,day,hours,minutes,seconds,zero
-    t = new Date()
-    year = t.getFullYear()
-    month = t.getMonth() + 1
-    day = t.getDate()
-    hours = t.getHours()
-    minutes = t.getMinutes()
-    seconds = t.getSeconds()
-    zero = [month,day,hours,minutes,seconds]
-    time = String(year)
-    for (var i = 0; i < zero.length; i++) {
-      zero[i] < 10 ? zero[i] = '0' + zero[i] : String(zero[i])
-      time = time + zero[i]
-    }
-    return time
-  },
-  get:function(s){
-    var k,v,d,p,t,f,e,y,o,l,tagName,tag,tagZh,sss,q
-    tag=['td','yd','yy','bw','bk','wz','sq','zx','h5','c3','js','py','xm','zj','sf','yl']
-    tagZh=['全部','阅读','英语','备忘','博客','文章','社区','总结','HTML5','CSS3','JavaScript','Python','项目','组件','算法','原理']
-    d = document.getElementsByClassName('td-display')[0]
-    d.innerHTML=''
-    t = document.createElement('h1')
-    for(var i=0;i<tag.length;i++){
-      if (s==tag[i]) {
-        d.innerHTML=tagZh[i]
-      }
-    }
-    for (var i = localStorage.length-1 ; i >= 0; i--) {
-      if (localStorage.key(i).match(s)) {
-        k = localStorage.key(i)
-        v = localStorage.getItem(k)
+var getJSON = (method,url,data) => {
+	let XMLHttp = new XMLHttpRequest();
+	XMLHttp.onreadystatechange = function () {
+		if (XMLHttp.readyState === 4 && XMLHttp.status === 200) {
+			console.log(XMLHttp.responseText);
+			var result = JSON.parse(XMLHttp.responseText);
+			let notes = $('.notes');
+			notes.empty();
+			 console.log(result); // test if ajax works
+			if (result.loginState !== 'no') {
+				if (result.length!==0) {
+					for (var x in result) {
+						let id = result[x].id,
+							title = result[x].title,
+							content = result[x].content,
+							template = `
+							<div class="row note" id="${id}">
+								<div class="note-title">
+									<p class="text-center note-title-content">${title}</p>
+									<div class="note-control">
+										<span class="glyphicon glyphicon-pencil" onclick="handle(this).edit()"></span>
+										<span class="glyphicon glyphicon-trash" onclick="handle(this).del()"></span>
+									</div>
+								</div>
+								<div class="note-content">${content}</div>
+							</div>
+						`;
+						notes.append(template);
+					};
+				}
+				else {
+					let template = '<p class="note text-center">没有发现笔记哦，试着去添加一条笔记吧 ^_^</p>'
+					notes.append(template);
+				}
+				
+			}
+			else {
+				let template = '<p class="note text-center">没有发现笔记哦，请登陆 ^_^</p>'
+				notes.append(template);
+			}
+			;
+			
+			
+		};
+	};
+	XMLHttp.open(method,url,true);
+	XMLHttp.send();
+};
+/*
+handle 处理增删改查
+get 获取后端数据进行页面展示 xhrPost xhrGet
+state 登陆提示，增删改查提示 模板信息
+test 测试函数集合
+*/
+var handle = function(val)  {
+	var val = $(val).parent().parent().parent();
+	var id = val.attr('id');
+	var del = function () {
+		myAjax.post('POST','/Note/api/note/delete.php',`noteId=${id}`);
+	};
+	var edit = function () {
+		const title = val.find('.note-title-content');
+		const content = val.find('.note-content');
+		title.attr('contenteditable','true');
+		title.focus();
+		content.attr('contenteditable','true');
+		val.mouseleave(function(event) {
+			$('body').click(function() {
+				title.attr('contenteditable','false');
+				content.attr('contenteditable','false');
+				/* BUG: 偶尔误触span会导致多次执行
+				alert('great');
+				*/
+				const titleVal = title.text();
+				const contentVal = content.text();
+				console.log(titleVal);
+				console.log(contentVal);
+				myAjax.post('POST','/Note/api/note/modify.php',`noteId=${id}&title=${titleVal}&content=${contentVal}`);
+				val.unbind('');
+				$('body').unbind('');
+				/* 阻止冒泡
+				return false;
+				event.stopPropagation();
+				event.preventDefualt();
+				*/
+			});
+		});
 
-        p = document.createElement('pre')
-        p.className = 'td-all'
-        p.setAttribute('data-save',k)
-        p.innerHTML = v
-        d.appendChild(p)
-
-        q = document.createElement('div')
-        q.className = 'td-more'
-        q.setAttribute('data-save',k)
-
-        f = document.createElement('a')
-        f.className = 'td-del'
-        f.setAttribute('data-save',k)
-        f.setAttribute('onclick','note.del(this)')
-        f.innerHTML = '删除'
-        q.appendChild(f)
-
-        e = document.createElement('a')
-        e.className = 'td-mod'
-        e.setAttribute('data-save',k)
-        e.setAttribute('onclick','note.mod(this)')
-        e.innerHTML = '修改'
-        q.appendChild(e)
-
-        y = document.createElement('a')
-        y.className = 'td-mov'
-        y.setAttribute('data-save',k)
-        y.setAttribute('onclick','note.mov(this)')
-        y.innerHTML = '移动'
-        q.appendChild(y)
-
-        d.appendChild(q)
-      }
-    }
-    l = document.querySelector('.td-ctrl')
-    l.value='打开'
-  },
-  getSearch:function(reg){
-    var k,v,d,p,t,f,e,y,o,l
-    note.get('zxx')
-    d = document.getElementsByClassName('td-display')[0]
-    for (var i = localStorage.length-1 ; i >= 0; i--) {
-      k = localStorage.key(i)
-      v = localStorage.getItem(k)
-      if (v.match(reg)) {
-        p = document.createElement('pre')
-        p.className = 'td-all'
-        p.setAttribute('data-save',k)
-        p.innerHTML = v
-        d.appendChild(p)
-        f = document.createElement('a')
-        f.className = 'td-del'
-        f.setAttribute('data-save',k)
-        f.setAttribute('onclick','note.del(this)')
-        f.innerHTML = '删除'
-        d.appendChild(f)
-        e = document.createElement('a')
-        e.className = 'td-mod'
-        e.setAttribute('data-save',k)
-        e.setAttribute('onclick','note.mod(this)')
-        e.innerHTML = '修改'
-        d.appendChild(e)
-        y = document.createElement('a')
-        y.className = 'td-mov'
-        y.setAttribute('data-save',k)
-        y.setAttribute('onclick','note.mov(this)')
-        y.innerHTML = '移动'
-        d.appendChild(y)
-      }
-    }
-    l = document.querySelector('.td-ctrl')
-    l.value='打开'
-  },
-  add:function(){
-    var tag,ctx,key
-    tag = document.getElementsByClassName('td-choose')[0].value
-    ctx = document.getElementsByClassName('td-input')[0].value
-    if (tag === '' || ctx === '') {
-      alert('内容不能为空')
-    }
-    else {
-      key = 'td_'+tag+'_'+this.tme()
-      localStorage.setItem(key,ctx)
-      this.get(tag)
-      document.getElementsByClassName('td-input')[0].value = ''
-    }
-  },
-  del:function (s){
-    var v,a,t
-    v = s.getAttribute("data-save")
-    t = v[3]+v[4]
-    a = prompt('Are you sure ?')
-    if (a === 'sure') {
-      localStorage.removeItem(v)
-      this.get(t)
-    }
-    else {
-      alert('删除失败')
-    }
-  },
-  save:function (s) {
-    var v,a,t,h,c
-    v = s.getAttribute("data-save")
-    a = document.querySelector('#box-dot')
-    h = a.innerHTML
-    localStorage.v = h
-    this.get(t)
-  },
-  ctrl:function (v) {
-    var s = document.querySelectorAll('.td-more')
-    s[0].style.display==='block' ? v.value='打开' : v.value='关闭'
-    for(var i=0;i<s.length;i++){
-      s[i].style.display==='' ? s[i].style.display='block' : s[i].style.display=''
-    }
-  }
+		//val.blur(alert('save'));
+		// myAjax.post('POST','/Note/api/note/delete.php',`noteId=${id}`);
+	};
+	return {
+		del:del,
+		edit:edit
+	};
+};
+var getModal = (id) => {
+	let myModal = {
+		login:{
+			id:'modalLogin',
+			title: `登陆`,
+			body: `
+				<form>
+		          <div class="form-group">
+		            <label for="user" class="control-label">账号</label>
+		            <input type="text" class="form-control loginUser" id="user">
+		          </div>
+		          <div class="form-group">
+		            <label for="pass" class="control-label">密码</label>
+		             <input type="text" class="form-control loginPass" id="pass">
+		          </div>
+		        </form>
+			`,
+			footer:`
+				<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+		        <button type="button" class="btn btn-primary" onclick="login()">登陆</button>
+			`
+		},
+		register:{
+			id:'modalRegister',
+			title: `注册`,
+			body: `
+				<form>
+		          <div class="form-group">
+		            <label for="user" class="control-label">账号</label>
+		            <input type="text" class="form-control registerUser" id="user">
+		          </div>
+		          <div class="form-group">
+		            <label for="pass" class="control-label">密码</label>
+		            <input type="text" class="form-control registerPass1" id="pass">
+		          </div>
+		          <div class="form-group">
+		            <label for="confirm-pass" class="control-label">确定密码</label>
+		            <input type="text" class="form-control registerPass2" id="confirm-pass">
+		          </div>
+		        </form>
+			`,
+			footer:`
+				<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+		        <button type="button" class="btn btn-primary" onclick="register()">注册</button>
+			`
+		}
+	},
+	template = `
+		<div class="modal fade" id="${myModal[id].id}" tabindex="-1" role="dialog">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h4 class="modal-title">${myModal[id].title}</h4>
+		      </div>
+		      <div class="modal-body">
+		        <form>${myModal[id].body}</form>
+		      </div>
+		      <div class="modal-footer">
+		        ${myModal[id].footer}
+		      </div>
+		    </div>
+		  </div>
+		</div>
+	`;
+	var body = $('body');
+	body.append(template);
 }
+var register = () => {
+	var user = $('.registerUser'),
+		pass1 = $('.registerPass1'),
+		pass2 = $('.registerPass2'),
+		pass = null;
+	if(pass1.val()===pass2.val()){
+		var	data = {
+		user:user.val(),
+		pass:pass1.val()
+		};
+		var postData = '';
+		for (let x in data) {
+			postData += x + '=' + data[x] + '&';
+		};
+		console.log(postData)
+		myAjax.post('POST','/Note/api/user/register.php',`user=${data.user}&pass=${data.pass}&mail=`);
+	}
+	else {
+		pass2.addClass('alert alert-warning');
+	}
 
-var x = localStorage.getItem('td_welcome')
-if(!x){
-  localStorage.setItem('td_bw_welcome','> 使用指南<br><br>+ 欢迎使用伯格笔记，你可以在左边保存笔记，或者按标签阅读笔记。<br><br>+ 删除笔记需要点击打开按钮，并且在提示框中输入sure进行确认。<br><br>+ 笔记将进行离线存储，长期有效（请勿清空浏览器）。')
-  localStorage.setItem('td_bw_welcome_1','> 项目地址<br><br>+ github https://github.com/bergwhite/bergnote/tree/dev<br><br>+ GPL 3.0')
-  localStorage.setItem('td_bw_welcome_2','> 开发者说<br><br>+ 项目还在开发阶段，还有很多设计不佳的地方有待改善（比如分类不能自定义、没有响应式布局（正在开发）和没有自动保存）<br><br>+ 有更好的建议欢迎提交issue')
-}
+};
+var login = () => {
+	var user = $('.loginUser'),
+		pass = $('.loginPass');
+	var	data = {
+	user:user.val(),
+	pass:pass.val()
+	};
+	myAjax.post('POST','/Note/api/user/login.php',`user=${data.user}&pass=${data.pass}`);
 
-var enter = function(reg) {
-  if (event.keyCode == 13) {
-    note.getSearch(reg)
-  }
+};
+var myAjax = {
+	post: function (method,url,data) {
+		let XMLHttp = new XMLHttpRequest();
+		XMLHttp.open(method,url,true);
+		XMLHttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+		XMLHttp.onreadystatechange = function () {
+			if (XMLHttp.readyState === 4 && XMLHttp.status === 200) {
+				console.log(XMLHttp.responseText);
+				var result = JSON.parse(XMLHttp.responseText);
+				console.log(result)
+				if(result.registerState==='yes'||result.loginState==='yes'||result.loginState==='login...'||result.logoutState||result.deleteState==='yes'){
+					location.reload();
+					/* 延迟刷新
+					reload = () =>  {
+						location.reload();
+					}
+					setTimeout("reload()",100);*/
+				};
+			};
+		};
+		XMLHttp.send(data);
+	}
+};
+var logout = function () {
+	myAjax.post('POST','/Note/api/user/logout.php');
 }
+var noteLogin = $('.note-login');
+//console.log(noteLogin.text())
+if($.cookie('user')){
+	noteLogin.empty();
+	noteLogin.addClass('row nav nav-pills clear clear-right');
+	//console.log(noteLogin)
+	let user = $.cookie('user'),
+		userNav = `
+		<li class="btn btn-default" onclick="logout()">注销</li> 
+		<li class="btn btn-primary">${user}</li>
+	`;
+	noteLogin.append(userNav);
+};
