@@ -18,8 +18,8 @@ var getJSON = (method,url,data) => {
 								<div class="note-title">
 									<p class="text-center note-title-content">${title}</p>
 									<div class="note-control">
-										<span class="glyphicon glyphicon-pencil" onclick="handle(this).edit"></span>
-										<span class="glyphicon glyphicon-trash" onclick="handle(this).del"></span>
+										<span class="glyphicon glyphicon-pencil" onclick="handle(this).edit()"></span>
+										<span class="glyphicon glyphicon-trash" onclick="handle(this).del()"></span>
 									</div>
 								</div>
 								<div class="note-content">${content}</div>
@@ -46,26 +46,52 @@ var getJSON = (method,url,data) => {
 	XMLHttp.open(method,url,true);
 	XMLHttp.send();
 };
-var handle = (val) =>  {
+/*
+handle 处理增删改查
+get 获取后端数据进行页面展示 xhrPost xhrGet
+state 登陆提示，增删改查提示 模板信息
+test 测试函数集合
+*/
+var handle = function(val)  {
 	var val = $(val).parent().parent().parent();
 	var id = val.attr('id');
-	let del = () => {
-		console.log(val.html());
+	var del = function () {
+		myAjax.post('POST','/Note/api/note/delete.php',`noteId=${id}`);
+	};
+	var edit = function () {
 		const title = val.find('.note-title-content');
 		const content = val.find('.note-content');
 		title.attr('contenteditable','true');
 		title.focus();
 		content.attr('contenteditable','true');
-		console.log(title.html());
-		console.log(content.html());
-	};
-	let edit = () => {
-		console.log(id);
-		myAjax.register('POST','/Note/api/note/delete.php',`noteId=${id}`);
+		val.mouseleave(function(event) {
+			$('body').click(function() {
+				title.attr('contenteditable','false');
+				content.attr('contenteditable','false');
+				/* BUG: 偶尔误触span会导致多次执行
+				alert('great');
+				*/
+				const titleVal = title.text();
+				const contentVal = content.text();
+				console.log(titleVal);
+				console.log(contentVal);
+				myAjax.post('POST','/Note/api/note/modify.php',`noteId=${id}&title=${titleVal}&content=${contentVal}`);
+				val.unbind('');
+				$('body').unbind('');
+				/* 阻止冒泡
+				return false;
+				event.stopPropagation();
+				event.preventDefualt();
+				*/
+			});
+		});
+
+		//val.blur(alert('save'));
+		// myAjax.post('POST','/Note/api/note/delete.php',`noteId=${id}`);
 	};
 	return {
-		del:del(),
-		edit:edit()
+		del:del,
+		edit:edit
 	};
 };
 var getModal = (id) => {
@@ -150,7 +176,7 @@ var register = () => {
 			postData += x + '=' + data[x] + '&';
 		};
 		console.log(postData)
-		myAjax.register('POST','/Note/api/user/register.php',`user=${data.user}&pass=${data.pass}&mail=`);
+		myAjax.post('POST','/Note/api/user/register.php',`user=${data.user}&pass=${data.pass}&mail=`);
 	}
 	else {
 		pass2.addClass('alert alert-warning');
@@ -164,11 +190,11 @@ var login = () => {
 	user:user.val(),
 	pass:pass.val()
 	};
-	myAjax.register('POST','/Note/api/user/login.php',`user=${data.user}&pass=${data.pass}`);
+	myAjax.post('POST','/Note/api/user/login.php',`user=${data.user}&pass=${data.pass}`);
 
 };
 var myAjax = {
-	register: function (method,url,data) {
+	post: function (method,url,data) {
 		let XMLHttp = new XMLHttpRequest();
 		XMLHttp.open(method,url,true);
 		XMLHttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
@@ -191,7 +217,7 @@ var myAjax = {
 	}
 };
 var logout = function () {
-	myAjax.register('POST','/Note/api/user/logout.php');
+	myAjax.post('POST','/Note/api/user/logout.php');
 }
 var noteLogin = $('.note-login');
 //console.log(noteLogin.text())
