@@ -5,8 +5,8 @@ include '../user/login_check.php';  // 引入登陆检查页面，未登录不�
 
 $cookie_userId = (int)$_COOKIE["userId"];  // 获取用户ID
 
-//$noteId = $_POST["noteId"];  // 获取文章ID
-$noteId = 29;
+$noteId = (int)$_POST["noteId"];  // 获取用户ID
+//$noteId = 30;
 
 /* 执行添加语句 */
 
@@ -16,10 +16,10 @@ $result = mysql_query($sql);
 /* 返回JSON状态*/
 
 if(mysql_affected_rows()){
-	$resultJSON = array("modifyState"=>"yes");
+	$resultJSON = array("deleteState"=>"yes");
 }
 else {
-	$resultJSON = array("modifyState"=>"no");
+	$resultJSON = array("deleteState"=>"no");
 }
 echo json_encode($resultJSON);
 

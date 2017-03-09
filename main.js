@@ -16,10 +16,10 @@ var getJSON = (method,url,data) => {
 							template = `
 							<div class="row note" id="${id}">
 								<div class="note-title">
-									<p class="text-center">${title}</p>
+									<p class="text-center note-title-content">${title}</p>
 									<div class="note-control">
-										<span class="glyphicon glyphicon-pencil"></span>
-										<span class="glyphicon glyphicon-trash"></span>
+										<span class="glyphicon glyphicon-pencil" onclick="handle(this).edit"></span>
+										<span class="glyphicon glyphicon-trash" onclick="handle(this).del"></span>
 									</div>
 								</div>
 								<div class="note-content">${content}</div>
@@ -45,6 +45,28 @@ var getJSON = (method,url,data) => {
 	};
 	XMLHttp.open(method,url,true);
 	XMLHttp.send();
+};
+var handle = (val) =>  {
+	var val = $(val).parent().parent().parent();
+	var id = val.attr('id');
+	let del = () => {
+		console.log(val.html());
+		const title = val.find('.note-title-content');
+		const content = val.find('.note-content');
+		title.attr('contenteditable','true');
+		title.focus();
+		content.attr('contenteditable','true');
+		console.log(title.html());
+		console.log(content.html());
+	};
+	let edit = () => {
+		console.log(id);
+		myAjax.register('POST','/Note/api/note/delete.php',`noteId=${id}`);
+	};
+	return {
+		del:del(),
+		edit:edit()
+	};
 };
 var getModal = (id) => {
 	let myModal = {
@@ -155,7 +177,7 @@ var myAjax = {
 				console.log(XMLHttp.responseText);
 				var result = JSON.parse(XMLHttp.responseText);
 				console.log(result)
-				if(result.registerState==='yes'||result.loginState==='yes'||result.loginState==='login...'||result.logoutState){
+				if(result.registerState==='yes'||result.loginState==='yes'||result.loginState==='login...'||result.logoutState||result.deleteState==='yes'){
 					location.reload();
 					/* 延迟刷新
 					reload = () =>  {
@@ -179,7 +201,8 @@ if($.cookie('user')){
 	//console.log(noteLogin)
 	let user = $.cookie('user'),
 		userNav = `
-		Hello, ${user} <button class="btn btn-default" onclick="logout()">注销</button>
+		<li class="btn btn-default" onclick="logout()">注销</li> 
+		<li class="btn btn-primary">${user}</li>
 	`;
 	noteLogin.append(userNav);
 };
