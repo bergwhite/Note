@@ -38,7 +38,7 @@ else {
 		$userId = $row["user_id"];
 
 		setcookie("user",$user,time()+3600,"/","localhost",null,false);
-		setcookie("userId",$userId,time()+3600,"/","localhost",null,true);
+		setcookie("userId",$userId,time()+3600,"/","localhost",null,false);
 		exit();
 		// echo $row['user_name'].' '.$row['user_pass']; // 测速登陆结果
 

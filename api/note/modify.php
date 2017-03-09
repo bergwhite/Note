@@ -5,8 +5,6 @@ include '../user/login_check.php';  // 引入登陆检查页面，未登录不�
 
 $cookie_userId = (int)$_COOKIE["userId"];  // 获取用户ID
 
-// echo gettype($cookie_userId);
-
 /* 文章信息
 
 $tag = $_POST["tag"];

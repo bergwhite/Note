@@ -2,6 +2,7 @@ var getJSON = (method,url,data) => {
 	let XMLHttp = new XMLHttpRequest();
 	XMLHttp.onreadystatechange = function () {
 		if (XMLHttp.readyState === 4 && XMLHttp.status === 200) {
+			console.log(XMLHttp.responseText);
 			var result = JSON.parse(XMLHttp.responseText);
 			let notes = $('.notes');
 			notes.empty();
@@ -153,11 +154,14 @@ var myAjax = {
 			if (XMLHttp.readyState === 4 && XMLHttp.status === 200) {
 				console.log(XMLHttp.responseText);
 				var result = JSON.parse(XMLHttp.responseText);
+				console.log(result)
 				if(result.registerState==='yes'||result.loginState==='yes'||result.loginState==='login...'||result.logoutState){
+					location.reload();
+					/* 延迟刷新
 					reload = () =>  {
 						location.reload();
 					}
-					setTimeout("reload()",1000);
+					setTimeout("reload()",100);*/
 				};
 			};
 		};
@@ -165,7 +169,7 @@ var myAjax = {
 	}
 };
 var logout = function () {
-	getJSON('POST','/Note/api/user/logout.php');
+	myAjax.register('POST','/Note/api/user/logout.php');
 }
 var noteLogin = $('.note-login');
 //console.log(noteLogin.text())

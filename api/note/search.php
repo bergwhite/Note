@@ -3,11 +3,11 @@
 include '../../conn.php';  // 引入数据库连接页面
 include '../user/login_check.php';  // 引入登陆检查页面，未登录不执行sql语句
 
-$cookie_userId = $_COOKIE["userId"];  // 获取用户ID
+$cookie_userId = (int)$_COOKIE["userId"];  // 获取用户ID
 
 /* 查询语句 */
 
-$sql = "select * from note where user_id = '$cookie_userId' order by note_id";  // 写入语句
+$sql = "select * from note where user_id = $cookie_userId order by note_id";  // 写入语句
 $result = mysql_query($sql);  // 执行语句
 $resultJSON = array();  // 定义数组
 

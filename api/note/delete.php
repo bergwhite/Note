@@ -4,7 +4,6 @@ include '../../conn.php';  // 引入数据库连接页面
 include '../user/login_check.php';  // 引入登陆检查页面，未登录不执行sql语句
 
 $cookie_userId = (int)$_COOKIE["userId"];  // 获取用户ID
-// echo gettype($cookie_userId);
 
 //$noteId = $_POST["noteId"];  // 获取文章ID
 $noteId = 29;
