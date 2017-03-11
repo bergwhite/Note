@@ -22,7 +22,7 @@ else {
 }
 //$mail = $_POST["content"];
 
-/* 前端界面未完成，暂时使用模拟信息 */
+/* 模拟信息测试 */
 /*
 $user = "lloxafs";
 $pass = "worlxdasfd";

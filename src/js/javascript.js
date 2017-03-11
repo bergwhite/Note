@@ -36,7 +36,6 @@
 			});
 
 			// login confirm (动态生成的class直接使用.click不能监听到)
-
 			$(document).on('click','.loginConfirm',function() {
 				handle().login();
 			})
@@ -61,7 +60,6 @@
 				// addTarget = add.attr('data-target').replace('#','');
 
 			// add botton
-
 			$(document).on('click','.ctrl-add',function() {
 				console.log(addId);
 				console.log(addTarget);
@@ -69,7 +67,6 @@
 			});
 
 			// add confirm (动态生成的class直接使用.click不能监听到)
-
 			$(document).on('click','.addConfirm',function() {
 				handle().add();
 			});
@@ -96,11 +93,9 @@
 	function check (state) {
 		function login () {
 			var noteLogin = $('.note-login');
-			// console.log(noteLogin.text())
 			if($.cookie('user')){
 				noteLogin.empty();
 				noteLogin.addClass('row nav nav-pills clear clear-right');
-				// console.log(noteLogin)
 				let user = $.cookie('user'),
 					userNav = `
 						<li class="btn btn-default logout">注销</li> 
@@ -214,11 +209,6 @@
 				console.log(result)
 				if(result.registerState==='yes'||result.loginState==='yes'||result.loginState==='login...'||result.logoutState||result.deleteState==='yes'||result.addState==='yes'){
 					location.reload();
-					/* 延迟刷新
-					reload = () =>  {
-						location.reload();
-					}
-					setTimeout("reload()",100);*/
 				};
 			};
 		};
@@ -339,13 +329,8 @@
 					ajax('POST','/Note/api/note/modify.php',`noteId=${id}&title=${titleVal}&content=${contentVal}`);
 					val.unbind('');
 					$('body').unbind('');
-					// 阻止冒泡
-					// return false;
 				});
 			});
-
-			// val.blur(alert('save'));
-			// ajax('POST','/Note/api/note/delete.php',`noteId=${id}`);
 		};
 		
 		function add () {
