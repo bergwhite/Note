@@ -54,6 +54,25 @@
 		else {
 			let edit = $('.ctrl-edit'),
 				del = $('.ctrl-del');
+			let add = $('.ctrl-add');
+			let addId = add.attr('id'),
+				addTarget = add.attr('data-target');
+				// Bug: Uncaught TypeError: Cannot read property 'replace' of undefined
+				// addTarget = add.attr('data-target').replace('#','');
+
+			// add botton
+
+			$(document).on('click','.ctrl-add',function() {
+				console.log(addId);
+				console.log(addTarget);
+				model(addId,addTarget);
+			});
+
+			// add confirm (动态生成的class直接使用.click不能监听到)
+
+			$(document).on('click','.addConfirm',function() {
+				handle().add();
+			});
 
 			// logout confirm
 			$(document).on('click','.logout',function() {
@@ -86,6 +105,7 @@
 					userNav = `
 						<li class="btn btn-default logout">注销</li> 
 						<li class="btn btn-primary">${user}</li>
+						<li role="presentation"><a href="#" data-toggle="modal" data-target="#modalAdd" id="add" class="ctrl-add">添加</a></li>
 					`;
 				noteLogin.append(userNav);
 				return true;
@@ -104,12 +124,12 @@
 			modalTitle = $('.modal-title'),
 			modalBody = $('.modal-body'),
 			modalFooter = $('.modal-footer');
-		myModal.attr('id',typeId);
+		myModal.attr('id',typeId.replace('#',''));
 		modalTitle.empty();
 		modalBody.empty();
 		modalFooter.empty();
 		const data = {
-			login:{
+			login: {
 				title: `登陆`,
 				body: `
 					<form>
@@ -128,7 +148,7 @@
 			        <button type="button" class="btn btn-primary loginConfirm">登陆</button>
 				`
 			},
-			register:{
+			register: {
 				title: `注册`,
 				body: `
 					<form>
@@ -150,6 +170,18 @@
 					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
 			        <button type="button" class="btn btn-primary registerConfirm">注册</button>
 				`
+			},
+			add: {
+				title: `添加`,
+				body: `
+					<input type="text" placeholder="标题" class="addTitle">
+					<textarea placeholder="内容"  class="addContent"></textarea>
+					<input type="text" placeholder="标签" class="addTag">
+				`,
+				footer:`
+					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+			        <button type="button" class="btn btn-primary addConfirm">添加</button>
+				`
 			}
 		};
 		modalTitle.append(data[type].title);
@@ -168,7 +200,7 @@
 				console.log(XMLHttp.responseText);
 				var result = JSON.parse(XMLHttp.responseText);
 				console.log(result)
-				if(result.registerState==='yes'||result.loginState==='yes'||result.loginState==='login...'||result.logoutState||result.deleteState==='yes'){
+				if(result.registerState==='yes'||result.loginState==='yes'||result.loginState==='login...'||result.logoutState||result.deleteState==='yes'||result.addState==='yes'){
 					location.reload();
 					/* 延迟刷新
 					reload = () =>  {
@@ -191,7 +223,8 @@
 				var result = JSON.parse(XMLHttp.responseText);
 				let notes = $('.notes');
 				notes.empty();
-				 console.log(result); // test if ajax works
+				console.log(result); // test if ajax works
+				// TODO: 此处代码有待优化
 				if (result.loginState !== 'no') {
 					if (result.length!==0) {
 						for (var x in result) {
@@ -302,6 +335,22 @@
 			// val.blur(alert('save'));
 			// ajax('POST','/Note/api/note/delete.php',`noteId=${id}`);
 		};
+		
+		function add () {
+			var title = $('.addTitle'),
+				content = $('.addContent'),
+				tag = $('.addTag'),
+				date = new Date(),
+				dateTime = date.getTime();
+
+			var	data = {
+				title:title.val(),
+				content:content.val(),
+				tag:tag.val(),
+				date:'2017-03-11'	
+			};
+			ajax('POST','/Note/api/note/add.php',`title=${data.title}&content=${data.content}&tag=${data.tag}&date=${data.date}`);
+		};
 		function del () {
 			ajax('POST','/Note/api/note/delete.php',`noteId=${id}`);
 		};
@@ -311,6 +360,7 @@
 		return {
 			register:register,
 			login:login,
+			add:add,
 			edit:edit,
 			del:del,
 			logout:logout
