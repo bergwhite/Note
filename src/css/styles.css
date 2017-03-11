@@ -2,7 +2,7 @@
   background-color: gray;
 }
 body {
-  overflow: scroll;
+  overflow-y: scroll;
 }
 .clear {
   overflow: hidden;
@@ -58,4 +58,11 @@ body {
 }
 .notes .note .note-control > span {
   margin-left: 20px;
+  /* BUG: not work
+				
+				*/
+}
+.footer {
+  margin: 0;
+  padding: 10px;
 }
