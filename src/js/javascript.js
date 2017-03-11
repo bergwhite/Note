@@ -96,16 +96,16 @@
 	function check (state) {
 		function login () {
 			var noteLogin = $('.note-login');
-			//console.log(noteLogin.text())
+			// console.log(noteLogin.text())
 			if($.cookie('user')){
 				noteLogin.empty();
 				noteLogin.addClass('row nav nav-pills clear clear-right');
-				//console.log(noteLogin)
+				// console.log(noteLogin)
 				let user = $.cookie('user'),
 					userNav = `
 						<li class="btn btn-default logout">注销</li> 
-						<li class="btn btn-primary">${user}</li>
-						<li role="presentation"><a href="#" data-toggle="modal" data-target="#modalAdd" id="add" class="ctrl-add">添加</a></li>
+						<li class="btn btn-default">${user}</li>
+						<li role="presentation"><a href="#" data-toggle="modal" data-target="#modalAdd" id="add" class="ctrl-add btn-primary">添加</a></li>
 					`;
 				noteLogin.append(userNav);
 				return true;
@@ -139,7 +139,7 @@
 			          </div>
 			          <div class="form-group">
 			            <label for="pass" class="control-label">密码</label>
-			             <input type="text" class="form-control loginPass" id="pass">
+			             <input type="password" class="form-control loginPass" id="pass">
 			          </div>
 			        </form>
 				`,
@@ -158,11 +158,11 @@
 			          </div>
 			          <div class="form-group">
 			            <label for="pass" class="control-label">密码</label>
-			            <input type="text" class="form-control registerPass1" id="pass">
+			            <input type="password" class="form-control registerPass1" id="pass">
 			          </div>
 			          <div class="form-group">
 			            <label for="confirm-pass" class="control-label">确定密码</label>
-			            <input type="text" class="form-control registerPass2" id="confirm-pass">
+			            <input type="password" class="form-control registerPass2" id="confirm-pass">
 			          </div>
 			        </form>
 				`,
@@ -174,9 +174,20 @@
 			add: {
 				title: `添加`,
 				body: `
-					<input type="text" placeholder="标题" class="addTitle">
-					<textarea placeholder="内容"  class="addContent"></textarea>
-					<input type="text" placeholder="标签" class="addTag">
+					<form>
+						<div class="form-group">
+							<label for="title" class="control-label">标题</label>
+							<input type="text" class="form-control addTitle" id="title">
+						</div>
+						<div class="form-group">
+							<label for="content" class="control-label">内容</label>
+							<textarea  class="form-control addContent" id="content"></textarea>
+						</div>
+						<div class="form-group">
+							<label for="tag" class="control-label">标签</label>
+							<input type="text" class="form-control addTag" id="tag">
+						</div>
+					</form>
 				`,
 				footer:`
 					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
@@ -187,6 +198,7 @@
 		modalTitle.append(data[type].title);
 		modalBody.append(data[type].body);
 		modalFooter.append(data[type].footer);
+		modalBody.find('input').eq(0),focus();
 	};
 
 	// ajax   数据: 通过XHR与后端交互并且返回结果

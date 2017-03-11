@@ -45,6 +45,15 @@ if($result){
 		//$user = urldecode($row["user_name"]);
 		$user = $row["user_name"];
 		$userId = $row["user_id"];
+		// 插入默认笔记
+		$defaultTitle = "这是一条默认的笔记";
+		$defaultContent = "试着用鼠标滑到这篇文章上，点击显示出的修改按钮吧。鼠标点击文章外部就会自动保存哦。";
+		$defaultTag = "未分类";
+		date_default_timezone_set("UTC");
+		$defaultDate = date("Y-m-d");
+		$sql = "insert into note (user_id,note_tag,note_title,note_content,note_date) values ($userId,'$defaultTag','$defaultTitle','$defaultContent','$defaultDate')";  // 写入语句
+		mysql_query($sql);
+		// 设置cookie
 		setcookie("user",$user,time()+3600,"/","localhost",null,false);
 		setcookie("userId",$userId,time()+3600,"/","localhost",null,false);
 		$resultJSON = array("registerState"=>"yes");
