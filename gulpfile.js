@@ -10,16 +10,25 @@ const gulp = require('gulp'),
 gulp.task('compile-less', () =>
     gulp.src('src/less/*.less')
         .pipe(less())
+        .pipe(rename(function(path){
+            path.basename += '.min'
+        }))
         .pipe(gulp.dest('src/css'))
 );
 gulp.task('minify-css', () =>
     gulp.src('src/css/*.css')
         .pipe(minifyCss())
+        .pipe(rename(function(path){
+            path.basename += '.min'
+        }))
         .pipe(gulp.dest('dist/css'))
 );
 gulp.task('minify-js', () =>
-    gulp.src('src/js/*.js')
+    gulp.src('dist/js/*.js')
         .pipe(uglify())
+        .pipe(rename(function(path){
+            path.basename += '.min'
+        }))
         .pipe(gulp.dest('dist/js'))
 );
 gulp.task('rename', () =>
@@ -52,5 +61,5 @@ gulp.task('lint', () => {
         // lint error, return the stream and pipe to failAfterError last. 
         .pipe(eslint.failAfterError());
 });
-gulp.task('default',['compile-less','babel']);
+gulp.task('ready',['compile-less','babel']);
 gulp.task('build',['minify-css','minify-js']);
