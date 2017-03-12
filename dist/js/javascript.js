@@ -1,1 +1,290 @@
-var note={tme:function(){var e,t,a,l,r,n,o,s,c;e=new Date,a=e.getFullYear(),l=e.getMonth()+1,r=e.getDate(),n=e.getHours(),o=e.getMinutes(),s=e.getSeconds(),c=[l,r,n,o,s],t=String(a);for(var d=0;d<c.length;d++)c[d]<10?c[d]="0"+c[d]:String(c[d]),t+=c[d];return t},get:function(e){var t,a,l,r,n,o,s,c,d,i,m,u;i=["td","yd","yy","bw","bk","wz","sq","zx","h5","c3","js","py","xm","zj","sf","yl"],m=["全部","阅读","英语","备忘","博客","文章","社区","总结","HTML5","CSS3","JavaScript","Python","项目","组件","算法","原理"],l=document.getElementsByClassName("td-display")[0],l.innerHTML="",n=document.createElement("h1");for(var g=0;g<i.length;g++)e==i[g]&&(l.innerHTML=m[g]);for(var g=localStorage.length-1;g>=0;g--)localStorage.key(g).match(e)&&(t=localStorage.key(g),a=localStorage.getItem(t),r=document.createElement("pre"),r.className="td-all",r.setAttribute("data-save",t),r.innerHTML=a,l.appendChild(r),u=document.createElement("div"),u.className="td-more",u.setAttribute("data-save",t),o=document.createElement("a"),o.className="td-del",o.setAttribute("data-save",t),o.setAttribute("onclick","note.del(this)"),o.innerHTML="删除",u.appendChild(o),s=document.createElement("a"),s.className="td-mod",s.setAttribute("data-save",t),s.setAttribute("onclick","note.mod(this)"),s.innerHTML="修改",u.appendChild(s),c=document.createElement("a"),c.className="td-mov",c.setAttribute("data-save",t),c.setAttribute("onclick","note.mov(this)"),c.innerHTML="移动",u.appendChild(c),l.appendChild(u));d=document.querySelector(".td-ctrl"),d.value="打开"},getSearch:function(e){var t,a,l,r,n,o,s,c;note.get("zxx"),l=document.getElementsByClassName("td-display")[0];for(var d=localStorage.length-1;d>=0;d--)t=localStorage.key(d),a=localStorage.getItem(t),a.match(e)&&(r=document.createElement("pre"),r.className="td-all",r.setAttribute("data-save",t),r.innerHTML=a,l.appendChild(r),n=document.createElement("a"),n.className="td-del",n.setAttribute("data-save",t),n.setAttribute("onclick","note.del(this)"),n.innerHTML="删除",l.appendChild(n),o=document.createElement("a"),o.className="td-mod",o.setAttribute("data-save",t),o.setAttribute("onclick","note.mod(this)"),o.innerHTML="修改",l.appendChild(o),s=document.createElement("a"),s.className="td-mov",s.setAttribute("data-save",t),s.setAttribute("onclick","note.mov(this)"),s.innerHTML="移动",l.appendChild(s));c=document.querySelector(".td-ctrl"),c.value="打开"},add:function(){var e,t,a;e=document.getElementsByClassName("td-choose")[0].value,t=document.getElementsByClassName("td-input")[0].value,""===e||""===t?alert("内容不能为空"):(a="td_"+e+"_"+this.tme(),localStorage.setItem(a,t),this.get(e),document.getElementsByClassName("td-input")[0].value="")},del:function(e){var t,a,l;t=e.getAttribute("data-save"),l=t[3]+t[4],a=prompt("Are you sure ?"),"sure"===a?(localStorage.removeItem(t),this.get(l)):alert("删除失败")},save:function(e){var t,a,l,r;t=e.getAttribute("data-save"),a=document.querySelector("#box-dot"),r=a.innerHTML,localStorage.v=r,this.get(l)},ctrl:function(e){var t=document.querySelectorAll(".td-more");"block"===t[0].style.display?e.value="打开":e.value="关闭";for(var a=0;a<t.length;a++)""===t[a].style.display?t[a].style.display="block":t[a].style.display=""}},x=localStorage.getItem("td_welcome");x||(localStorage.setItem("td_bw_welcome","> 使用指南<br><br>+ 欢迎使用伯格笔记，你可以在左边保存笔记，或者按标签阅读笔记。<br><br>+ 删除笔记需要点击打开按钮，并且在提示框中输入sure进行确认。<br><br>+ 笔记将进行离线存储，长期有效（请勿清空浏览器）。"),localStorage.setItem("td_bw_welcome_1","> 项目地址<br><br>+ github https://github.com/bergwhite/bergnote/tree/dev<br><br>+ GPL 3.0"),localStorage.setItem("td_bw_welcome_2","> 开发者说<br><br>+ 项目还在开发阶段，还有很多设计不佳的地方有待改善（比如分类不能自定义、没有响应式布局（正在开发）和没有自动保存）<br><br>+ 有更好的建议欢迎提交issue"));var enter=function(e){13==event.keyCode&&note.getSearch(e)};
+'use strict';
+
+(function () {
+
+  /*
+   * ctrl   控制: 自调用的主代码
+   * check  检查: 检查用户是否登陆
+   * model  模板: 登陆注册的模拟弹窗
+   * test   测试: 
+   * 
+   * ajax   数据: 通过XHR与后端交互并且返回结果
+   * render 渲染: 对首屏数据进行渲染
+   * hint   提示: 操作时候的状态信息
+   * handle 处理: 登陆注册和修改编辑
+   */
+
+  // ctrl   控制: 自调用的主代码
+
+  (function () {
+
+    var loginState = check().login();
+
+    // event listener
+
+    // $( document ).on( events, selector, data, handler );        // jQuery 1.7+
+
+    if (!loginState) {
+      var login = $('#login'),
+          loginId = login.attr('id'),
+          loginTarget = login.attr('data-target').replace('#', ''),
+          register = $('#register'),
+          registerId = register.attr('id'),
+          registerTarget = register.attr('data-target').replace('#', '');
+
+      // login botton
+      login.click(function () {
+        model(loginId, loginTarget);
+      });
+      // login confirm (动态生成的class直接使用.click不能监听到)
+      $(document).on('click', '.loginConfirm', function () {
+        handle().login();window.event.cancelBubble = true;
+      });
+      // register botton
+      register.click(function () {
+        return model(registerId, registerTarget);
+      });
+      // register confirm
+      $(document).on('click', '.registerConfirm', function () {
+        return handle().register();
+      });
+    } else {
+      render('GET', '/Note/api/note/search.php');
+      var edit = $('.ctrl-edit'),
+          del = $('.ctrl-del');
+      var add = $('.ctrl-add');
+      var addId = add.attr('id'),
+          addTarget = add.attr('data-target');
+      var logout = $('.logout');
+      // add botton
+      add.click(function () {
+        return model(addId, addTarget);
+      });
+      // add confirm (动态生成的class直接使用.click不能监听到)
+      $(document).on('click', '.addConfirm', function () {
+        return handle().add();
+      });
+      // logout confirm
+      logout.click(function () {
+        return handle().logout();
+      });
+      $(document).on('click', '.ctrl-edit', function () {
+        handle($(this)).edit();
+      });
+      $(document).on('click', '.ctrl-del', function () {
+        handle($(this)).del();
+      });
+    }
+  })();
+
+  // check  检查: 
+
+  function check(state) {
+    function login() {
+      var login = $('.note-login'),
+          logined = $('.note-logined');
+      if ($.cookie('user')) {
+        var userCookie = $.cookie('user'),
+            userName = $('.user-name');
+        login.hide();
+        userName.text(userCookie);
+        logined.show();
+        return true;
+      } else {
+        logined.hide();
+        login.show();
+      };
+      return false;
+    };
+    return {
+      login: login
+    };
+  };
+
+  // model  模板: 登陆注册的模拟弹窗 BUG: 添加成功但是不显示模拟弹窗
+
+  function model(type, typeId) {
+    var myModal = $('.modal'),
+        modalTitle = $('.modal-title'),
+        modalBody = $('.modal-body'),
+        modalFooter = $('.modal-footer');
+    myModal.attr('id', typeId.replace('#', ''));
+    modalTitle.empty();
+    modalBody.empty();
+    modalFooter.empty();
+    var data = {
+      login: {
+        title: '\u767B\u9646',
+        body: '\n          <form>\n                <div class="form-group">\n                  <label for="user" class="control-label">\u8D26\u53F7</label>\n                  <input type="text" class="form-control loginUser" id="user">\n                </div>\n                <div class="form-group">\n                  <label for="pass" class="control-label">\u5BC6\u7801</label>\n                   <input type="password" class="form-control loginPass" id="pass">\n                </div>\n              </form>\n        ',
+        footer: '\n          <button type="button" class="btn btn-default" data-dismiss="modal">\u53D6\u6D88</button>\n              <button type="button" class="btn btn-primary loginConfirm">\u767B\u9646</button>\n        '
+      },
+      register: {
+        title: '\u6CE8\u518C',
+        body: '\n          <form>\n                <div class="form-group">\n                  <label for="user" class="control-label">\u8D26\u53F7</label>\n                  <input type="text" class="form-control registerUser" id="user">\n                </div>\n                <div class="form-group">\n                  <label for="pass" class="control-label">\u5BC6\u7801</label>\n                  <input type="password" class="form-control registerPass1" id="pass">\n                </div>\n                <div class="form-group">\n                  <label for="confirm-pass" class="control-label">\u786E\u5B9A\u5BC6\u7801</label>\n                  <input type="password" class="form-control registerPass2" id="confirm-pass">\n                </div>\n              </form>\n        ',
+        footer: '\n          <button type="button" class="btn btn-default" data-dismiss="modal">\u53D6\u6D88</button>\n              <button type="button" class="btn btn-primary registerConfirm">\u6CE8\u518C</button>\n        '
+      },
+      add: {
+        title: '\u6DFB\u52A0',
+        body: '\n          <form>\n            <div class="form-group">\n              <label for="title" class="control-label">\u6807\u9898</label>\n              <input type="text" class="form-control addTitle" id="title">\n            </div>\n            <div class="form-group">\n              <label for="content" class="control-label">\u5185\u5BB9</label>\n              <textarea  class="form-control addContent" id="content"></textarea>\n            </div>\n            <div class="form-group">\n              <label for="tag" class="control-label">\u6807\u7B7E</label>\n              <input type="text" class="form-control addTag" id="tag">\n            </div>\n          </form>\n        ',
+        footer: '\n          <button type="button" class="btn btn-default" data-dismiss="modal">\u53D6\u6D88</button>\n              <button type="button" class="btn btn-primary addConfirm">\u6DFB\u52A0</button>\n        '
+      }
+    };
+    modalTitle.append(data[type].title);
+    modalBody.append(data[type].body);
+    modalFooter.append(data[type].footer);
+    // modalBody.find('input').eq(0),focus();
+    // not work
+  };
+
+  // ajax   数据: 通过XHR与后端交互并且返回结果
+
+  function ajax(method, url, data) {
+    var XMLHttp = new XMLHttpRequest();
+    XMLHttp.open(method, url, true);
+    XMLHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    XMLHttp.onreadystatechange = function () {
+      if (XMLHttp.readyState === 4 && XMLHttp.status === 200) {
+        console.log(XMLHttp.responseText);
+        var result = JSON.parse(XMLHttp.responseText);
+        console.log(result);
+        if (result.registerState === 'yes' || result.loginState === 'yes' || result.loginState === 'login...' || result.logoutState || result.deleteState === 'yes' || result.addState === 'yes') {
+          location.reload();
+        };
+      };
+    };
+    XMLHttp.send(data);
+  };
+
+  // render 渲染: 对首屏数据进行渲染
+
+  function render(method, url, data) {
+    var XMLHttp = new XMLHttpRequest();
+    XMLHttp.onreadystatechange = function () {
+      if (XMLHttp.readyState === 4 && XMLHttp.status === 200) {
+        console.log(XMLHttp.responseText);
+        var result = JSON.parse(XMLHttp.responseText);
+        var notes = $('.notes');
+        notes.empty();
+        console.log(result); // test if ajax works
+        // TODO: 此处代码有待优化
+        if (result.loginState !== 'no') {
+          if (result.length !== 0) {
+            for (var x in result) {
+              var id = result[x].id,
+                  title = result[x].title,
+                  content = result[x].content,
+                  template = '\n                <div class="row note" id="' + id + '">\n                  <div class="note-title">\n                    <p class="text-center note-title-content">' + title + '</p>\n                    <div class="note-control">\n                      <span class="glyphicon glyphicon-pencil ctrl-edit"></span>\n                      <span class="glyphicon glyphicon-trash ctrl-del"></span>\n                    </div>\n                  </div>\n                  <div class="note-content">' + content + '</div>\n                </div>\n              ';
+              notes.append(template);
+            };
+          } else {
+            var _template = '<p class="note text-center">没有发现笔记哦，试着去添加一条笔记吧 ^_^</p>';
+            notes.append(_template);
+          }
+        } else {
+          var _template2 = '<p class="note text-center">没有发现笔记哦，请登陆 ^_^</p>';
+          notes.append(_template2);
+        }
+        ;
+      };
+    };
+    XMLHttp.open(method, url, true);
+    XMLHttp.send();
+  };
+
+  // handle 处理: 登陆注册和修改编辑
+
+  function handle(val) {
+    if (val !== undefined) {
+      var val = val.parent().parent().parent();
+      var id = val.attr('id');
+      console.log(val);
+      console.log(id);
+    }
+    function register() {
+      var user = $('.registerUser'),
+          pass1 = $('.registerPass1'),
+          pass2 = $('.registerPass2'),
+          pass = null;
+      if (pass1.val() === pass2.val()) {
+        var data = {
+          user: user.val(),
+          pass: pass1.val()
+        };
+        var postData = '';
+        for (var x in data) {
+          postData += x + '=' + data[x] + '&';
+        };
+        console.log(postData);
+        ajax('POST', '/Note/api/user/register.php', 'user=' + data.user + '&pass=' + data.pass + '&mail=');
+      } else {
+        pass2.addClass('alert alert-warning');
+      }
+    };
+    function login() {
+      var user = $('.loginUser'),
+          pass = $('.loginPass');
+      var data = {
+        user: user.val(),
+        pass: pass.val()
+      };
+      // Debug: handle/login
+      console.log('user:' + data.user);
+      console.log('pass:' + data.pass);
+      ajax('POST', '/Note/api/user/login.php', 'user=' + data.user + '&pass=' + data.pass);
+    };
+    function edit() {
+      var title = val.find('.note-title-content');
+      var content = val.find('.note-content');
+      title.attr('contenteditable', 'true');
+      title.focus();
+      content.attr('contenteditable', 'true');
+      console.log('title');
+      console.log('content');
+      val.mouseleave(function (event) {
+        $('body').click(function () {
+          title.attr('contenteditable', 'false');
+          content.attr('contenteditable', 'false');
+          // BUG: 偶尔误触span会导致多次执行
+          // alert('great');
+          var titleVal = title.text();
+          var contentVal = content.text();
+          console.log(titleVal);
+          console.log(contentVal);
+          ajax('POST', '/Note/api/note/modify.php', 'noteId=' + id + '&title=' + titleVal + '&content=' + contentVal);
+          val.unbind('');
+          $('body').unbind('');
+        });
+      });
+    };
+
+    function add() {
+      var title = $('.addTitle'),
+          content = $('.addContent'),
+          tag = $('.addTag'),
+          date = new Date(),
+          dateTime = date.getTime();
+
+      var data = {
+        title: title.val(),
+        content: content.val(),
+        tag: tag.val(),
+        date: '2017-03-11'
+      };
+      ajax('POST', '/Note/api/note/add.php', 'title=' + data.title + '&content=' + data.content + '&tag=' + data.tag + '&date=' + data.date);
+    };
+    function del() {
+      ajax('POST', '/Note/api/note/delete.php', 'noteId=' + id);
+    };
+    function logout() {
+      ajax('POST', '/Note/api/user/logout.php');
+    };
+    return {
+      register: register,
+      login: login,
+      add: add,
+      edit: edit,
+      del: del,
+      logout: logout
+    };
+  };
+})();

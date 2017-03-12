@@ -13,8 +13,12 @@ body {
 .clear-right > li {
   float: right;
 }
-.note-login {
+.note-login,
+.note-logined {
   margin-top: 20px;
+}
+.note-logined {
+  display: none;
 }
 .note-name {
   transition: all 3s;
@@ -58,9 +62,6 @@ body {
 }
 .notes .note .note-control > span {
   margin-left: 20px;
-  /* BUG: not work
-				
-				*/
 }
 .footer {
   margin: 0;

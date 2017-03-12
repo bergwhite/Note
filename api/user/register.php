@@ -54,8 +54,11 @@ if($result){
 		$sql = "insert into note (user_id,note_tag,note_title,note_content,note_date) values ($userId,'$defaultTag','$defaultTitle','$defaultContent','$defaultDate')";  // 写入语句
 		mysql_query($sql);
 		// 设置cookie
-		setcookie("user",$user,time()+3600,"/","localhost",null,false);
-		setcookie("userId",$userId,time()+3600,"/","localhost",null,false);
+		// Thanks for http://blog.csdn.net/binbin1129/article/details/5829940
+		// Now, works in IE
+		$domain = ($_SERVER['HTTP_HOST'] != 'localhost') ? $_SERVER['HTTP_HOST'] : false;
+		setcookie("user",$user,time()+3600,"/",$domain,null,false);
+		setcookie("userId",$userId,time()+3600,"/",$domain,null,false);
 		$resultJSON = array("registerState"=>"yes");
 	}
 	

@@ -10,8 +10,11 @@ include '../user/login_check.php';  // 引入登陆检查页面，未登录不�
 
 // TODO not work
 
-setcookie("user",null,time()-3600,"/","localhost",null,false);
-setcookie("userId",null,time()-3600,"/","localhost",null,false);
+// Thanks for http://blog.csdn.net/binbin1129/article/details/5829940
+// Now, works in IE
+$domain = ($_SERVER['HTTP_HOST'] != 'localhost') ? $_SERVER['HTTP_HOST'] : false;
+setcookie("user",null,time()-3600,"/",$domain,null,false);
+setcookie("userId",null,time()-3600,"/",$domain,null,false);
 
 /* 判断是否注销成功并且返回值 */
 
