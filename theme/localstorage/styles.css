@@ -223,7 +223,7 @@ pre {
 }
 @media screen and (max-width:1000px) {
   body {
-    background-color: gray;
+    background-color: white;
   }
   .navigator {
     height: 35px;
@@ -302,7 +302,6 @@ pre {
     top: 0;
     margin: 0;
     background-color: rgba(0, 218, 255, 1);
-    color: black;
   }
   .td-tags {
     text-align: left;
@@ -320,9 +319,9 @@ pre {
     right: 0;
     margin: 0;
     width: 100px;
-    background-color: transparent;
+    background-color: rgba(97, 124, 255, 1);
   }
   .td-all {
-    color: white;
+    color: black;
   }
 }
