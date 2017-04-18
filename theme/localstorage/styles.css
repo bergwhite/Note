@@ -312,6 +312,7 @@ pre {
   .td-top {
     width: 30px;
     height: 30px;
+    line-height: 30px;
   }
   .td-ctrl {
     position: absolute;
