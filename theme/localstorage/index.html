@@ -3,7 +3,7 @@
   <head>
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <meta charset="utf-8">
-    <title>伯格笔记（单机版）</title>
+    <title>离线笔记</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <script type="text/javascript">
@@ -24,8 +24,7 @@
       <!-- 顶栏 -->
 
       <div class="navigator">
-        <div class="logo">伯格笔记</div>
-        <div class="menu"></div>
+        <div class="logo">离线笔记</div>
         <div class="search">
           <input type="text" placeholder="查找" class="search-input" onkeypress="enter(this.value)">
         </div>
@@ -62,27 +61,21 @@
               </optgroup>
             </select>
             <textarea placeholder="输入内容" autofocus spellcheck="false" class="td-input"></textarea>
-            <input type="submit" value="保存" class="td-save" onclick="note.add()">
+            <input type="submit" value="保存笔记" class="td-save" onclick="note.add()">
           </div>
           <div class="td-tags">
             <a href="javascript:void(0)" onclick="note.get('td')" class="td-tag td-selected">全部</a>
             <a href="javascript:void(0)" onclick="note.get('yd')" class="td-tag">阅读</a>
             <a href="javascript:void(0)" onclick="note.get('yy')" class="td-tag">英语</a>
             <a href="javascript:void(0)" onclick="note.get('bw')" class="td-tag">备忘</a>
-          </div>
-          <div class="td-tags">
             <a href="javascript:void(0)" onclick="note.get('bk')" class="td-tag">博客</a>
             <a href="javascript:void(0)" onclick="note.get('wz')" class="td-tag">文章</a>
             <a href="javascript:void(0)" onclick="note.get('sq')" class="td-tag">社区</a>
             <a href="javascript:void(0)" onclick="note.get('zx')" class="td-tag">总结</a>
-          </div>
-          <div class="td-tags">
             <a href="javascript:void(0)" onclick="note.get('h5')" class="td-tag">H5</a>
             <a href="javascript:void(0)" onclick="note.get('c3')" class="td-tag">C3</a>
             <a href="javascript:void(0)" onclick="note.get('js')" class="td-tag">JS</a>
             <a href="javascript:void(0)" onclick="note.get('py')" class="td-tag">Py</a>
-          </div>
-          <div class="td-tags">
             <a href="javascript:void(0)" onclick="note.get('xm')" class="td-tag">项目</a>
             <a href="javascript:void(0)" onclick="note.get('zj')" class="td-tag">组件</a>
             <a href="javascript:void(0)" onclick="note.get('sf')" class="td-tag">算法</a>
@@ -97,7 +90,7 @@
       </div>
 
     </div>
-    <div class="td-top" onclick="scroll(0,0)">家</div>
+    <div class="td-top" onclick="scroll(0,0)">回到顶部</div>
     <script src="javascript.js"></script>
   </body>
 </html>

@@ -68,7 +68,7 @@ var note = {
       }
     }
     l = document.querySelector('.td-ctrl')
-    l.value='打开'
+    l.value='打开控制面板'
   },
   getSearch:function(reg){
     var k,v,d,p,t,f,e,y,o,l
@@ -104,7 +104,7 @@ var note = {
       }
     }
     l = document.querySelector('.td-ctrl')
-    l.value='打开'
+    l.value='打开控制面板'
   },
   add:function(){
     var tag,ctx,key
@@ -143,7 +143,7 @@ var note = {
   },
   ctrl:function (v) {
     var s = document.querySelectorAll('.td-more')
-    s[0].style.display==='block' ? v.value='打开' : v.value='关闭'
+    s[0].style.display==='block' ? v.value='打开控制面板' : v.value='关闭控制面板'
     for(var i=0;i<s.length;i++){
       s[i].style.display==='' ? s[i].style.display='block' : s[i].style.display=''
     }
@@ -152,7 +152,7 @@ var note = {
 
 var x = localStorage.getItem('td_welcome')
 if(!x){
-  localStorage.setItem('td_bw_welcome','> 使用指南<br><br>+ 欢迎使用伯格笔记，你可以在左边保存笔记，或者按标签阅读笔记。<br><br>+ 删除笔记需要点击打开按钮，并且在提示框中输入sure进行确认。<br><br>+ 笔记将进行离线存储，长期有效（请勿清空浏览器）。')
+  localStorage.setItem('td_bw_welcome','> 使用指南<br><br>+ 欢迎使用伯格笔记，你可以在左边保存笔记，或者按标签阅读笔记。<br><br>+ 删除笔记需要点击控制面板按钮，并且在提示框中输入sure进行确认。<br><br>+ 笔记将进行离线存储，长期有效（请勿清空浏览器）。')
   localStorage.setItem('td_bw_welcome_1','> 项目地址<br><br>+ github https://github.com/bergwhite/bergnote/tree/dev<br><br>+ GPL 3.0')
   localStorage.setItem('td_bw_welcome_2','> 开发者说<br><br>+ 项目还在开发阶段，还有很多设计不佳的地方有待改善（比如分类不能自定义、没有响应式布局（正在开发）和没有自动保存）<br><br>+ 有更好的建议欢迎提交issue')
 }
